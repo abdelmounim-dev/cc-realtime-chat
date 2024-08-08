@@ -1,9 +1,28 @@
-.PHONY: build run
+.PHONY: all clean build
 
-# Build the project and specify the output directory and file name
-build:
-	go build -o ./bin/myproject
+# Directories
+BINDIR := bin
 
-# Build the project and run the binary
-run: build
-	./bin/myproject
+# Binaries
+SERVER_BINARY := $(BINDIR)/server
+CLIENT_BINARY := $(BINDIR)/client
+
+all: clean build
+
+# Build both server and client
+build: $(SERVER_BINARY) $(CLIENT_BINARY)
+
+# Build the server binary
+$(SERVER_BINARY): cmd/server/main.go
+	@echo "Building server..."
+	go build -o $(SERVER_BINARY) cmd/server/main.go
+
+# Build the client binary
+$(CLIENT_BINARY): cmd/client/main.go
+	@echo "Building client..."
+	go build -o $(CLIENT_BINARY) cmd/client/main.go
+
+# Clean up the binaries
+clean:
+	@echo "Cleaning up..."
+	rm -f $(SERVER_BINARY) $(CLIENT_BINARY)
