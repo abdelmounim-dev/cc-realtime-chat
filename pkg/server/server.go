@@ -6,6 +6,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"strings"
 )
 
 func broadcast(conns *[]net.Conn, msgChan chan string) error {
@@ -29,6 +30,7 @@ func handleConn(c net.Conn, msgChan chan string) {
 	reader := bufio.NewReader(c)
 	for {
 		msg, err := reader.ReadString('\n')
+		msg = strings.TrimSpace(msg)
 		if err != nil {
 			if err == io.EOF {
 				break
